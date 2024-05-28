@@ -1,3 +1,5 @@
+const { Food } = require('./food');
+
 class Player {
 
     constructor(name, startingRoom) {
@@ -25,31 +27,46 @@ class Player {
             console.log(`${this.name} is not carrying anything.`);
         } else {
             console.log(`${this.name} is carrying:`);
-            for (let i = 0 ; i < this.items.length ; i++) {
-                console.log(`  ${this.items[i].name}`);
+            for (let item of this.items) {
+                console.log(`${item.name}`);
             }
         }
     }
 
     takeItem(itemName) {
-
-        // Fill this in
-
+        const item = this.currentRoom.getItemByName(itemName);
+        if (item) {
+            this.currentRoom.items = this.currentRoom.items.filter(i => i !== item);
+            this.items.push(item);
+            console.log(`You picked up ${itemName}.`);
+        } else {
+            console.log(`${itemName} is not in this room.`);
+        }
     }
 
     dropItem(itemName) {
-
-        // Fill this in
+        const item = this.getItemByName(itemName);
+        if (item) {
+            this.items = this.items.filter(i => i !== item);
+            this.currentRoom.items.push(item);
+            console.log(`You dropped ${itemName}.`);
+        } else {
+            console.log(`You don't have ${itemName}.`);
+        }
     }
 
     eatItem(itemName) {
-        // Fill this in
-
+        const item = this.getItemByName(itemName);
+        if (item && item instanceof Food) {
+            this.items = this.items.filter(i => i !== item);
+            console.log(`You ate the ${itemName}`);
+        } else {
+            console.log(`You can't eat ${itemName}`);
+        }
     }
 
     getItemByName(name) {
-
-        // Fill this in
+        return this.items.find(item => item.name === name);
     }
 }
 
